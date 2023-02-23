@@ -1,4 +1,6 @@
 # Installing and importing necessary libraries
+import torch
+from PIL import Image
 from torch import nn, save, load
 from torch.optim import Adam
 from torch.utils.data import DataLoader
@@ -31,6 +33,17 @@ loss_fn = nn.CrossEntropyLoss()
 
 #Training Flow
 if __name__ == '__main__':
+    with open('model_state.pt', 'rb') as f:
+        clf.load_state_dict(load(f))
+    
+    img = Image.open('img_1.jpg')
+    img_tensor = ToTensor()(img).unsqueeze(0).to('cpu')
+
+    print(torch.argmax(clf(img_tensor)))
+
+
+
+
     for epoch in range(10):
         for batch in datasets:
             X,y = batch
